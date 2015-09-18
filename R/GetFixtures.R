@@ -41,11 +41,11 @@ GetFixtures <-
     if (missing(sportname))
       stop("Provide a Sport Name")
     
-    sportId <- GetSports(FALSE)[,"SportID"][sportname== GetSports(FALSE)[,"SportName"]]
+    sportId <- GetSports(FALSE)[,"SportID"][tolower(GetSports(FALSE)[,"SportName"]) %in% tolower(sportname)]
     ##
     
     
-    PossibleLeagueIds = GetLeaguesByID(sportId)
+    PossibleLeagueIds = GetLeaguesByID(sportId,force=TRUE)
     PossibleLeagueIds = PossibleLeagueIds$LeagueID[PossibleLeagueIds$LinesAvailable==1]
     if(missing(leagueIds))
       leagueIds <- PossibleLeagueIds
