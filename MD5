@@ -1,6 +1,6 @@
-80010d6bad336234604509aa4ac0fe39 *DESCRIPTION
-43e3eca145f42608a5dd460a4844e679 *NAMESPACE
-dca948c8894546ac5901167101413b62 *NEWS
+8ce8cebfc2e0596f58920509b2816f8e *DESCRIPTION
+8eb5847089d227f9b2e3e7ba89fca5af *NAMESPACE
+f8153ed0a06a5aee4a5bf1ed769ca1a4 *NEWS
 007bf38d2ed486793fc6db21c9207f66 *R/Authorization.R
 b56af48d2d8e0622148ac9c0631f676d *R/EnvironmentSetting.R
 d9d87cba35a6384f4c0d2a9e77c75511 *R/GetBets.R
@@ -15,7 +15,8 @@ d4ea9d5729b2907213b0490ed6b951b0 *R/GetFixtures.R
 cd7761a109bfaefd00fe7eb8145d3507 *R/GetSports.R
 c2b206ffc3e5befb827666cc71e12030 *R/PlaceBet.R
 e1d874f88aa502cda8f6e466497f2d17 *R/PlaceParlayBet.R
-e518750bd210e08ab14f8190b3cbc1e1 *R/showOddsDF.R
+9878e21f8f169e2b6dd2061c8fc7a47e *R/pinnRawXMLResponse.R
+adf7eb281f87b30dc4b875b726ba6f60 *R/showOddsDF.R
 2cb9f438010d54184546ba9755ba583f *R/showOddsFunctions.R
 95425d32c310021ef2c4a210a6024ce7 *README.md
 83471de308846da91eb69fda03a15177 *man/AcceptTermsAndConditions.Rd
@@ -37,4 +38,5 @@ cf29cbbefebb581c186f92b6a8e34333 *man/PlaceBet.Rd
 c9dade23896e4be3e3033c9cfd04a389 *man/SetCredentials.Rd
 07621fa572dc7e66a601fdcb78e54d70 *man/authorization.Rd
 1e829f522f6f807ecfbaba95c801acf8 *man/cbindNames.Rd
+3b0942bba058d88816ea0ee5cecb3a9f *man/pinnRawXMLResponse.Rd
 3867cc236f1e260685981b73716bfd6d *man/showOddsDF.Rd
