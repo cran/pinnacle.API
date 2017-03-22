@@ -2,24 +2,37 @@
 % Please edit documentation in R/showOddsDF.R
 \name{showOddsDF}
 \alias{showOddsDF}
-\title{showOddsDF - Takes a GetOdds JSON response and turns it into a data.frame}
+\title{showOddsDF - Takes a GetOdds JSON response and combines with Fixtures and Inrunning}
 \usage{
-showOddsDF(sportname, leagueIds = NULL, since = NULL, isLive = 0,
-  attachLeagueNames = TRUE, force = TRUE)
+showOddsDF(sportid, leagueids = NULL, since = NULL, islive = 0,
+  force = TRUE, tableformat = "mainlines", namesLength = 3,
+  attachLeagueInfo = TRUE, oddsformat = "AMERICAN")
 }
 \arguments{
-\item{sportname}{The sport name for which to retrieve the fixutres}
+\item{sportid}{(optional) The sportid to get odds from, if none is given, 
+a list of options and a prompt are provided}
 
-\item{leagueIds}{numeric vector of leagueids - can get as output from GetLeagues}
+\item{leagueids}{numeric vector of leagueids - can get as output from GetLeagues}
 
 \item{since}{numeric This is used to receive incremental updates.
 Use the value of last from previous fixtures response.}
 
-\item{isLive}{boolean if TRUE retrieves ONLY live events}
+\item{islive}{boolean if TRUE retrieves ONLY live events}
 
-\item{attachLeagueNames}{boolean default set to true, will attach league names.}
+\item{force}{boolean default set to TRUE, forces a reload of the cache.}
 
-\item{force}{boolean default set to TRUE, forces a reload of the cache.
+\item{tableformat}{\itemize{
+\item 'mainlines' (default), only shows mainlines
+\item 'long' for a single record for each spread/total on an event, 
+\item 'wide' for all lines as one record, 
+\item 'subtables' all lines for spreads/totals stored as nested tables
+}}
+
+\item{namesLength}{how many identifiers to use in the names, default is 3}
+
+\item{attachLeagueInfo}{whether or not to include league information in the data}
+
+\item{oddsformat}{default AMERICAN, see API manual for more options
 bettable leagues}
 }
 \value{
@@ -28,12 +41,13 @@ Naming convention is as follows, Example: spread.altLineId.N is the altLineId as
 whereas spread.hdp refers to the mainline. spread.altLineId is the first alternate, and equivalent to spread.altLineId.0
 }
 \description{
-showOddsDF - Takes a GetOdds JSON response and turns it into a data.frame
+showOddsDF - Takes a GetOdds JSON response and combines with Fixtures and Inrunning
 }
 \examples{
 \donttest{
 SetCredentials("TESTAPI","APITEST")
 AcceptTermsAndConditions(accepted=TRUE)
-showOddsDF(sportname="Badminton",leagueIds=191545)}
+# Run without arguments, it will prompt you for the sport
+showOddsDF()}
 }
 

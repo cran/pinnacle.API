@@ -5,17 +5,17 @@
 \title{Get Lines 
 (Use to get more detail on a single line, but the GetOdds or showOddsDF versions are intended for large amounts of data)}
 \usage{
-GetLine(sportId, leagueids, eventId, periodNumber, betType, team = NULL,
-  side = NULL, handicap = NULL, oddsFormat = "AMERICAN")
+GetLine(sportid, leagueids, eventid, periodnumber, betType, team = NULL,
+  side = NULL, handicap = NULL, oddsFormat = "AMERICAN", force = TRUE)
 }
 \arguments{
-\item{sportId}{The sport ID}
+\item{sportid}{The sport ID}
 
 \item{leagueids}{integer vector of leagueids.}
 
-\item{eventId}{numeric xxxxx}
+\item{eventid}{numeric xxxxx}
 
-\item{periodNumber}{xxxxx}
+\item{periodnumber}{xxxxx}
 
 \item{betType}{xxxx}
 
@@ -26,6 +26,8 @@ GetLine(sportId, leagueids, eventId, periodNumber, betType, team = NULL,
 \item{handicap}{xxx}
 
 \item{oddsFormat}{xxx}
+
+\item{force}{passed along to GetSports}
 }
 \value{
 returns a data frame with columns:

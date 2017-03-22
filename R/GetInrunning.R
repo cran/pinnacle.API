@@ -2,6 +2,7 @@
 #'
 #' @return A dataframe containing the current State of live events
 #' @import httr
+#' @import data.table
 #' @importFrom jsonlite fromJSON
 #' @export
 #'
@@ -12,14 +13,20 @@
 #' GetInrunning()
 #' }
 GetInrunning <- function() {
-  r <- GET(paste0(.PinnacleAPI$url ,"/v1/inrunning"),
-           add_headers(Authorization= authorization(),
-                       "Content-Type" = "application/json"))
-  res <-  jsonlite::fromJSON(content(r,type="text"),simplifyVector=FALSE)
+  CheckTermsAndConditions()
+  sprintf('%s/v1/inrunning', .PinnacleAPI$url) %>%
+    GET(add_headers(Authorization= authorization(),
+                    "Content-Type" = "application/json")) %>%
+    content(type = 'text') %>%
+    jsonlite::fromJSON(flatten = TRUE) %>%
+    as.data.table() %>%
+    with({
+      if(all(sapply(.,is.atomic))) .
+      expandListColumns(.)
+    }) %>%
+    with({
+      if(all(sapply(.,is.atomic))) .
+      expandListColumns(.)
+    })
   
-  inrunningState <- JSONtoDF(res)
-  
-  names(inrunningState)[1:2] = c('SportID','LeagueID')
-  if(length(names(inrunningState))>2) names(inrunningState)[3] = c('EventID')
-  return(inrunningState)
 }

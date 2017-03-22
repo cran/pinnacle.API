@@ -1,14 +1,13 @@
-#' Get Odds
+#' Get Special Odds
 #'
 #' @param sportid (optional) The sport id for which to retrieve the fixutres
 #' @param leagueids (optional) integer vector of leagueids.
 #' @param since (optional) numeric This is used to receive incremental updates.
 #' Use the value of last from previous response.
-#' @param islive boolean if TRUE retrieves ONLY live events
 #' @param oddsformat default AMERICAN, see API manual for more options
-#' @param tableformat
+#' @param tableformat 
 #' \itemize{
-#' \item 'mainlines' (default), only shows mainlines
+#' \item 'clean' default should return each contestant records 
 #' \item 'long' for a single record for each spread/total on an event, 
 #' \item 'wide' for all lines as one record, 
 #' \item 'subtables' all lines for spreads/totals stored as nested tables
@@ -22,17 +21,15 @@
 #' @examples
 #' \donttest{
 #' SetCredentials("TESTAPI","APITEST")
-#' AcceptTermsAndConditions(accepted = TRUE)
-#' # We can run without parameters, and will be given a selection of sports
-#' GetOdds()}
-GetOdds <-
+#' AcceptTermsAndConditions(accepted=TRUE)
+#' GetSpecialOdds()}
+GetSpecialOdds <-
   function(sportid,
            leagueids = NULL,
            since = NULL,
-           islive = 0,
            oddsformat = 'AMERICAN',
-           tableformat = 'mainlines',
-           force=TRUE){
+           tableformat = 'clean',
+           force = TRUE){
     CheckTermsAndConditions()
     
     ## retrieve sportid
@@ -43,15 +40,13 @@ GetOdds <-
     }
     
     r <- 
-      sprintf('%s/v1/odds', .PinnacleAPI$url) %>%
-      modify_url(query = list(sportId=sportid,
+      sprintf('%s/v1/odds/special', .PinnacleAPI$url) %>%
+      modify_url(query = list(sportId = sportid,
                               leagueIds = if(!is.null(leagueids)) paste(leagueids,collapse=',') else NULL,
-                              since=since,
-                              isLive=islive*1L,
-                              oddsFormat = oddsformat)) %>%
+                              since = since)) %>%
       httr::GET(add_headers(Authorization= authorization(),
                       "Content-Type" = "application/json")) %>%
-      content(type="text")
+      content(type="text") 
     
     
     # If no rows are returned, return empty data.frame
@@ -61,19 +56,15 @@ GetOdds <-
       jsonlite::fromJSON(flatten = TRUE) %>%
       as.data.table %>%
       with({
-        if(all(sapply(.,is.atomic))) .
-        else expandListColumns(.)
-      }) %>%
-      with({
-        if(all(sapply(.,is.atomic))) .
-        else expandListColumns(.)
-      }) %>%
-      with({
         
-        if(tableformat == 'mainlines') SpreadsAndTotalsMainlines(.)
-        else if(tableformat == 'long')      SpreadsAndTotalsLong(.)
+        if(all(sapply(.,is.atomic))) .
+        expandListColumns(.)
+      }) %>%
+      with({
+        if(tableformat == 'long')      SpreadsAndTotalsLong(.)
         else if(tableformat == 'wide')      SpreadsAndTotalsWide(.)
         else if(tableformat == 'subtables') .
+        else if(tableformat == 'clean') expandListColumns(.)
         else stop("Undefined value for tableFormat, options are 'mainlines','long','wide', and 'subtables'")
       }) %>%
       as.data.frame()
