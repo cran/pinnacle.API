@@ -5,7 +5,60 @@
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 grp <- NULL
 sports.id <- NULL
-simplify_all <- NULL
+
+# Simplifies each list column to be wide
+simplify_all <- function(x) {
+  # Define to eliminate CRAN Note
+  altLineId <- nullcol <- NULL
+  
+  # Remove Mainlines
+  mainlines <- 
+    lapply(x, function(y) {
+      if(is.null(y)) data.frame(nullcol = NA) 
+      else if(!is.null(y[['altLineId']])) y[is.na(y[['altLineId']]),] 
+      else y
+    })
+  
+  max_mainlines_returned <- max(sapply(mainlines, NROW))
+  
+  if(max_mainlines_returned == 1) {
+    alternates <- 
+      lapply(x, function(y) {
+        if(!is.null(y) && !is.null(y[['altLineId']])) as.list(unlist_special(y[!is.na(y[['altLineId']]),]))
+      })
+    out <- rbindlist(Map(c, mainlines, alternates), fill = TRUE)
+    suppressWarnings(out[, nullcol := NULL])
+    # altLineId is always null by design
+    suppressWarnings(out[, altLineId := NULL])
+    out
+  } else {
+    # several lines per row. Specials
+    # no altLineId will be present
+    suppressWarnings(
+      rbindlist(
+        lapply(mainlines, function(x) {
+          if(length(x) > 0) as.list(unlist_special(x))
+          else list(id = NA, 
+                    lineId = NA, 
+                    price = NA,
+                    handicap = NA)
+          }), 
+        fill = TRUE
+      )
+    )
+  }
+}
+
+# Does unlist, but with a better naming convention
+unlist_special <- function(x) {
+  structure(
+    unlist(x,use.names = FALSE), 
+    .Names = 
+      paste(
+        rep(names(x), each = NROW(x)), 
+        rep(1:NROW(x), length(x)), sep = '_')
+    )
+}
 
 # expand list columns, only works if we have corresponding data
 # for example, two tables of alt-lines will give misleading data
@@ -71,13 +124,14 @@ SpreadsAndTotalsMainlines <- function(dt) {
 
 # Puts data into wide format (not recommended)
 SpreadsAndTotalsWide <- function(dt) {
+  #browser()
   dt %>%
-    map_if(is.list, simplify_all) %>%
-    map_if(is.list, lapply, as.list) %>%
-    #as.data.table %>%
-    RemoveNulls %>%
-    map_if(is.list, rbindlist, fill = TRUE) %>%
-    as.data.table
+    .[, c(purrr::discard(.SD, is.list),do.call(c,lapply(purrr::keep(.SD, is.list), simplify_all)))]
+    # map_if(is.list, lapply, as.list) %>%
+    # #as.data.table %>%
+    # RemoveNulls %>%
+    # map_if(is.list, rbindlist, fill = TRUE) %>%
+    # as.data.table
 }
 
 # Best way for interacting with data

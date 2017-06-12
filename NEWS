@@ -1,9 +1,35 @@
-pinnacle.API v2.0.4 (Release date: 2016-12-06)
+pinnacle.API v2.0.8 (Release date: 2016-05-30)
+==============
+
+Changes:
+* Bug: solution for GetSpecialOdds caused another issue, fixed
+
+pinnacle.API v2.0.7 (Release date: 2016-05-29)
+==============
+
+Changes:
+* GetLine now returns visibly
+* GetSpecialOdds, wide format now working correctly
+
+pinnacle.API v2.0.6 (Release date: 2016-05-08)
+==============
+
+Changes:
+* Fix to showOddsDF (wide tableformat supported)
+
+pinnacle.API v2.0.5 (Release date: 2016-04-02)
+==============
+
+Changes:
+* Fix to showOddsDF (No live games bug)
+
+pinnacle.API v2.0.4 (Release date: 2016-03-11)
 ==============
 
 Changes:
 * Major Upgrade, all functions now more in line with
   the fields and wrappers in the pinnacle.api manual
+  (CRAN RELEASE READY)
 
 pinnacle.API v2.0.3 (Release date: 2016-12-06)
 ==============

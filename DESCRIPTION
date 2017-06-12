@@ -1,6 +1,6 @@
 Package: pinnacle.API
 Type: Package
-Version: 2.0.4
+Version: 2.0.9
 Title: A Wrapper for the Pinnacle API
 URL: https://github.com/marcoblume/pinnacle.API
 Author: Nicholas Jhirad, Marco Blume, Amine Gassem
@@ -10,8 +10,8 @@ LazyData: true
 License: GPL-3
 Imports: data.table, openssl, magrittr, purrr, uuid, httr, jsonlite,
         rjson
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2017-03-22 17:21:28 UTC; MarcoB
+Packaged: 2017-06-12 22:23:07 UTC; MarcoB
 Repository: CRAN
-Date/Publication: 2017-03-22 17:42:48 UTC
+Date/Publication: 2017-06-12 22:52:09 UTC
