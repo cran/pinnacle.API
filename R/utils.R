@@ -99,6 +99,31 @@ APIcall <- function(endpoint, query = NULL) {
     content(type="text")
 }
 
+# Raise formatted Pinnacle API errors for an httr::response object.
+CheckForAPIErrors <- function(response) {
+  code <- httr::status_code(response)
+  # Ignore HTTP status OK (200) objects.
+  if (code != 200) {
+    if (httr::http_type(response) == "application/json") {
+      # Translate JSON errors, if provided.
+      response <- response %>%
+        httr::content(type = "text", encoding = "UTF-8") %>%
+        jsonlite::fromJSON()
+      stop(paste0(response$message,
+                  ifelse(endsWith(response$message, "."), "", "."),
+                  " (code: ", response$code, ")"))
+    } else {
+      # Give approximate errors when the error does not return JSON.
+      switch(as.character(code),
+             "400" = stop("Invalid request parameters."),
+             "401" = stop("Invalid or missing login credentials."),
+             "403" = stop("Account is inactive or lacks API access."),
+             "500" = stop("Internal API server error."),
+             stop("API request returned HTTP code ", code))
+    }
+  }
+}
+
 # Remove Nulls from lists:
 RemoveNulls <- function(dt) {
   # if(!is.data.table(dt)) stop('Function only defined for data.table')
@@ -182,6 +207,7 @@ ViewSports <-
            showEventCount = TRUE,
            showEspecials = FALSE,
            showLspecials = FALSE) {
+
     with(GetSports(force = TRUE),{
       cat(sprintf('SportId - Sport (# %s):\n',
                   paste0(if(showEventCount) 'events',

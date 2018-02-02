@@ -1,3 +1,41 @@
+pinnacle.API v2.3.3 (Release date: 2018-01-24)
+==============
+
+Changes
+* Error handling and messaging now ubiquitous
+* http codes mapped to failure messages
+
+pinnacle.API v2.3.2 (Release date: 2016-07-20)
+==============
+
+Changes
+* Better handling when there are no odds to display in 
+  showOddsDF.
+
+pinnacle.API v2.3.1 (Release date: 2016-07-19)
+==============
+
+Changes
+* Potentially breaking change in behavior of showOddsDF:
+we only return lines for which we have returned odds. So if a line is down, 
+showOddsDF will not show it. If inrunning state or fixtures are required, 
+please call those directly.
+  
+pinnacle.API v2.1.1 (Release date: 2016-07-19)
+==============
+
+Changes
+* Bug in showOddsDF, since parameter was constraining both fixtures and odds
+  Created "fixtures_since" and let the original since cover only odds.
+
+pinnacle.API v2.1.0 (Release date: 2016-07-10)
+==============
+
+Changes:
+* jsonlite::rbind.pages deprecated, switched to jsonlite::rbind_pages
+* Removed utf-8 messages
+* Added Real Messages
+
 pinnacle.API v2.0.8 (Release date: 2016-05-30)
 ==============
 

@@ -49,34 +49,44 @@ GetLine <- function(sportid, leagueids, eventid,
 {
   
   CheckTermsAndConditions()
-  if(missing(sportid)) {
+  if (missing(sportid)) {
     cat('No Sports Selected, choose one:\n')
     ViewSports(force = force)
     sportid <- readline('Selection (id): ')
   }
   
-  if(missing(leagueids)) {
+  if (missing(leagueids)) {
     cat('No Leagues Selected, choose:\n')
     ViewLeagues(force = force)
     leagueids <- readline('Selection (id): ')
   }
-  
-  r <- sprintf('%s/v1/line', .PinnacleAPI$url) %>%
-    modify_url(
-      query = list(sportId=sportid,
-                   leagueId = paste(leagueids,collapse=','),
-                   eventId=eventid,
-                   periodNumber=periodnumber,
-                   betType=betType,
-                   team=team,
-                   side=side,
-                   handicap=handicap,
-                   oddsFormat=oddsFormat)
-      ) %>%
-    GET(add_headers(Authorization= authorization(),
-                    "Content-Type" = "application/json")) %>%
-    content(type = 'text') %>%
-    jsonlite::fromJSON()
-  
-  return(r)
+  message(
+    Sys.time(),
+    '| Pulling line - sportid: ', sportid,
+    ' leagueids: ', leagueids, 
+    ' eventid: ', eventid,
+    ' betType: ', betType,
+    if (!is.null(team)) sprintf(' team: %s', team),
+    if (!is.null(side)) sprintf(' side: %s', side),
+    if (!is.null(handicap)) sprintf(' handicap: %s', handicap),
+    ' oddsFormat: ', oddsFormat
+  )
+
+  response <- httr::GET(paste0(.PinnacleAPI$url, "/v1/line"),
+                        httr::add_headers(Authorization = authorization()),
+                        httr::accept_json(),
+                        query = list(sportId = sportid,
+                                     leagueId = leagueids,
+                                     eventId = eventid,
+                                     periodNumber = periodnumber,
+                                     betType = betType,
+                                     team = team,
+                                     side = side,
+                                     handicap = handicap,
+                                     oddsFormat = oddsFormat))
+
+  CheckForAPIErrors(response)
+
+  response <- httr::content(response, type = "text", encoding = "UTF-8")
+  jsonlite::fromJSON(response)
 }
